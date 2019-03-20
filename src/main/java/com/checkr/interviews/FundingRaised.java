@@ -6,56 +6,62 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FundingRaised {
-    public static List<Map<String, String>> where(Map<String, String> options) throws IOException {
+
+    public static List<String[]> readFile(String path) throws IOException {
         List<String[]> csvData = new ArrayList<String[]>();
-        CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
+        CSVReader reader = new CSVReader(new FileReader(path));
         String[] row = null;
 
-        while((row = reader.readNext()) != null) {
+        while ((row = reader.readNext()) != null) {
             csvData.add(row);
         }
 
         reader.close();
         csvData.remove(0);
+        return csvData;
+    }
 
-        if(options.containsKey("company_name")) {
-            List<String[]> results = new ArrayList<String[]> ();
+    public static List<Map<String, String>> where(Map<String, String> options) throws IOException {
+        
+        List<String[]> csvData = readFile("startup_funding.csv");
+        if (options.containsKey("company_name")) {
+            List<String[]> results = new ArrayList<String[]>();
 
-            for(int i = 0; i < csvData.size(); i++) {
-                if(csvData.get(i)[1].equals(options.get("company_name"))) {
+            for (int i = 0; i < csvData.size(); i++) {
+                if (csvData.get(i)[1].equals(options.get("company_name"))) {
                     results.add(csvData.get(i));
                 }
             }
             csvData = results;
         }
 
-        if(options.containsKey("city")) {
-            List<String[]> results = new ArrayList<String[]> ();
+        if (options.containsKey("city")) {
+            List<String[]> results = new ArrayList<String[]>();
 
-            for(int i = 0; i < csvData.size(); i++) {
-                if(csvData.get(i)[4].equals(options.get("city"))) {
+            for (int i = 0; i < csvData.size(); i++) {
+                if (csvData.get(i)[4].equals(options.get("city"))) {
                     results.add(csvData.get(i));
                 }
             }
             csvData = results;
         }
 
-        if(options.containsKey("state")) {
-            List<String[]> results = new ArrayList<String[]> ();
+        if (options.containsKey("state")) {
+            List<String[]> results = new ArrayList<String[]>();
 
-            for(int i = 0; i < csvData.size(); i++) {
-                if(csvData.get(i)[5].equals(options.get("state"))) {
+            for (int i = 0; i < csvData.size(); i++) {
+                if (csvData.get(i)[5].equals(options.get("state"))) {
                     results.add(csvData.get(i));
                 }
             }
             csvData = results;
         }
 
-        if(options.containsKey("round")) {
-            List<String[]> results = new ArrayList<String[]> ();
+        if (options.containsKey("round")) {
+            List<String[]> results = new ArrayList<String[]>();
 
-            for(int i = 0; i < csvData.size(); i++) {
-                if(csvData.get(i)[9].equals(options.get("round"))) {
+            for (int i = 0; i < csvData.size(); i++) {
+                if (csvData.get(i)[9].equals(options.get("round"))) {
                     results.add(csvData.get(i));
                 }
             }
@@ -64,8 +70,8 @@ public class FundingRaised {
 
         List<Map<String, String>> output = new ArrayList<Map<String, String>>();
 
-        for(int i = 0; i < csvData.size(); i++) {
-            Map<String, String> mapped = new HashMap<String, String> ();
+        for (int i = 0; i < csvData.size(); i++) {
+            Map<String, String> mapped = new HashMap<String, String>();
             mapped.put("permalink", csvData.get(i)[0]);
             mapped.put("company_name", csvData.get(i)[1]);
             mapped.put("number_employees", csvData.get(i)[2]);
@@ -83,21 +89,12 @@ public class FundingRaised {
     }
 
     public static Map<String, String> findBy(Map<String, String> options) throws IOException, NoSuchEntryException {
-        List<String[]> csvData = new ArrayList<String[]>();
-        CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
-        String[] row = null;
+        List<String[]> csvData = readFile("startup_funding.csv");
+        Map<String, String> mapped = new HashMap<String, String>();
 
-        while((row = reader.readNext()) != null) {
-            csvData.add(row);
-        }
-
-        reader.close();
-        csvData.remove(0);
-        Map<String, String> mapped = new HashMap<String, String> ();
-
-        for(int i = 0; i < csvData.size(); i++) {
-            if(options.containsKey("company_name")) {
-                if(csvData.get(i)[1].equals(options.get("company_name"))) {
+        for (int i = 0; i < csvData.size(); i++) {
+            if (options.containsKey("company_name")) {
+                if (csvData.get(i)[1].equals(options.get("company_name"))) {
                     mapped.put("permalink", csvData.get(i)[0]);
                     mapped.put("company_name", csvData.get(i)[1]);
                     mapped.put("number_employees", csvData.get(i)[2]);
@@ -113,8 +110,8 @@ public class FundingRaised {
                 }
             }
 
-            if(options.containsKey("city")) {
-                if(csvData.get(i)[4].equals(options.get("city"))) {
+            if (options.containsKey("city")) {
+                if (csvData.get(i)[4].equals(options.get("city"))) {
                     mapped.put("permalink", csvData.get(i)[0]);
                     mapped.put("company_name", csvData.get(i)[1]);
                     mapped.put("number_employees", csvData.get(i)[2]);
@@ -130,8 +127,8 @@ public class FundingRaised {
                 }
             }
 
-            if(options.containsKey("state")) {
-                if(csvData.get(i)[5].equals(options.get("state"))) {
+            if (options.containsKey("state")) {
+                if (csvData.get(i)[5].equals(options.get("state"))) {
                     mapped.put("permalink", csvData.get(i)[0]);
                     mapped.put("company_name", csvData.get(i)[1]);
                     mapped.put("number_employees", csvData.get(i)[2]);
@@ -147,8 +144,8 @@ public class FundingRaised {
                 }
             }
 
-            if(options.containsKey("round")) {
-                if(csvData.get(i)[9].equals(options.get("round"))) {
+            if (options.containsKey("round")) {
+                if (csvData.get(i)[9].equals(options.get("round"))) {
                     mapped.put("permalink", csvData.get(i)[0]);
                     mapped.put("company_name", csvData.get(i)[1]);
                     mapped.put("number_employees", csvData.get(i)[2]);
@@ -172,15 +169,16 @@ public class FundingRaised {
 
     public static void main(String[] args) {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
+            Map<String, String> options = new HashMap<String, String>();
             options.put("company_name", "Facebook");
             options.put("round", "a");
             System.out.print(FundingRaised.where(options).size());
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
     }
 }
 
-class NoSuchEntryException extends Exception {}
+class NoSuchEntryException extends Exception {
+}
